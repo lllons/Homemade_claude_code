@@ -32,7 +32,7 @@ Or any other model you prefer.
 **2 — Clone the repo**
 
 ```bash
-git clone https://github.com/lllons/local-file-ai.git
+git clone https://github.com/lllons/Homemade_claude_code.git
 cd local-file-ai
 ```
 
