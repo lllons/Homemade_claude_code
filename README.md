@@ -7,5 +7,7 @@ i will list them later when i have some time
 Just run these 3 commands in order:
 
 cd "C:\Users\ALiam\OneDrive\Desktop\Coding\chat"
+
 .\venv\Scripts\activate
+
 python agent.py
