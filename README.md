@@ -1,115 +1,104 @@
-# Local File AI Agent
 
-A terminal-based AI agent that uses a locally running Ollama model to create, read, write and delete files in a sandboxed workspace directory.
+> "I can read, write, and execute. And if you press F2, I can listen, too." 
+> — *Local File AI Agent*
 
-## What it does
+# `[ Local File AI Agent ]`
 
-You type a task in plain English. The agent figures out what files to create or modify, does it, and confirms when done. It loops automatically until the task is complete.
+A terminal-based, entirely local AI agent powered by Ollama. It doesn't just write code—it manages files, runs scripts, opens applications, and converses with you in a secure, sandboxed workspace.
 
-Example tasks:
-- `make a file called notes.txt with my shopping list inside`
-- `create a weather app with index.html, style.css and script.js`
-- `read config.json and rewrite it with proper formatting`
+---
 
-## Requirements
+## `>_ WHAT IT DOES`
 
-- Python 3.10+
-- [Ollama](https://ollama.com) running locally
-- A compatible model pulled via Ollama
+You type (or speak) a task in plain English. The agent figures out what files to create or modify, executes the actions, and confirms when done. It loops automatically until the task is complete.
 
-## Setup
+**Example Prompts:**
+* `"Make a file called notes.txt with my shopping list inside."`
+* `"Create a weather app with index.html, style.css, and script.js."`
+* `"Run the python script I just made."`
+* `"Open my workspace in File Explorer."`
 
-**0 — Change the file location in agent.py to whereever you want the agent to see and edit code**
+### `System Capabilities`
 
-**1 — Install Ollama**
+| Capability | Description |
+| :--- | :--- |
+| **File Operations** | Write, append, patch, rename, read, and delete files. |
+| **Code Execution** | Automatically compiles and runs C/C++/Java, and executes Python, JS, Go, and more. |
+| **Voice Control** | Press **F2** to trigger local Whisper STT. The agent replies using system TTS. |
+| **App Launching** | Can open permitted local apps like Notepad and File Explorer directly from the chat. |
+| **Action Batching** | Performs multiple independent file operations simultaneously for faster results. |
 
-Download from [ollama.com](https://ollama.com) and install it. Then pull a model:
+---
 
+## `>_ REQUIREMENTS`
+
+* **Python:** 3.10+
+* **LLM Backend:** [Ollama](https://ollama.com) running locally
+* **Model:** A compatible coding model (default: `qwen2.5-coder:7b`)
+* **OS:** Windows is recommended for full Voice and App Launching capabilities.
+
+---
+
+## `>_ INITIALIZATION_SEQUENCE`
+
+**0. Set Your Workspace**
+Open `agent.py` and modify the `ROOT_DIR` variable to dictate where the agent is allowed to see and edit files. It cannot escape this directory.
+
+**1. Install Ollama & Pull Model**
+Download from [ollama.com](https://ollama.com), install it, and pull the default model:
 ```bash
 ollama pull qwen2.5-coder:7b
+2. Clone the Repository
 ```
-
-Or any other model you prefer.
-
-**2 — Clone the repo**
-
-```bash
-git clone https://github.com/lllons/Homemade_claude_code.git
+```Bash
+git clone [https://github.com/lllons/Homemade_claude_code.git](https://github.com/lllons/Homemade_claude_code.git)
 cd local-file-ai
+3. Initialize Virtual Environment
 ```
 
-**3 — Create a virtual environment**
-
-```bash
+```Bash
 python -m venv venv
-venv\Scripts\activate  # Windows
-source venv/bin/activate  # Mac/Linux
+venv\Scripts\activate
+4. Install Dependencies
 ```
-
-**4 — Install dependencies**
-
-```bash
-pip install -r requirements.txt
+```Bash
+pip install requests rich
+pip install pyttsx3 faster-whisper sounddevice soundfile numpy
+5. Start the Engine
+Ensure your Ollama server is running:
 ```
-
-**5 — Configure**
-
-Open `config.py` and set your values:
-
-```python
-MODEL = "qwen2.5-coder:7b"
-OLLAMA_URL = "http://localhost:11434/api/chat"
-API_KEY = ""  # only needed for remote Ollama instances
-```
-
-For local use you don't need to change anything. If you're pointing at a remote Ollama instance, update the URL and add your key.
-
-**6 — Run it**
-
-Make sure Ollama is running first:
-
-```bash
+```Bash
 ollama serve
+Then, execute the agent:
 ```
-
-Then in a new terminal:
-
-```bash
+```Bash
 python agent.py
+>_ CONFIGURATION
+There is no separate config file. To change settings, open agent.py and modify the constants at the top of the script:
 ```
-
-## Workspace
-
-All files are created inside the `Dist/` folder by default. This folder is gitignored so your generated files never get pushed. You can change the workspace path in `agent.py` by editing the `ROOT_DIR` variable.
-
-## Changing the model
-
-Open `config.py` and edit:
-
-```python
+```Python
 MODEL = "qwen2.5-coder:7b"
+OLLAMA_URL = "http://localhost:11434/api/generate"
+ROOT_DIR = Path(r"C:\Your\Custom\Path\Here").resolve()
 ```
+>_ HOW IT WORKS
+Input: You provide a prompt via text or voice.
 
-Any model you've pulled via Ollama will work. Coding models like `qwen2.5-coder` tend to work best for file generation tasks.
+Context: The agent sends the prompt and a snapshot of your workspace state to the model.
 
-## How it works
+Action: The model responds with strict, formatted JSON.
 
-1. You type a task
-2. The agent sends it to the model with a strict system prompt
-3. The model responds with a JSON action
-4. The agent executes the action on your filesystem
-5. The result is sent back to the model
-6. This loops until the model says it's done
+Execution: The agent validates the JSON, ensures paths are safe, and executes the filesystem or terminal command.
 
-The agent is sandboxed — it can only touch files inside the workspace directory and will refuse any path that tries to escape it.
+Feedback: The result is fed back into the model's context window.
 
-## Limitations
+Resolution: The loop continues until the model explicitly calls the done or respond action.
 
-- Works best on small focused tasks
-- Large multi-file projects may lose context over many iterations
-- No internet access — purely local file operations
-- Each session starts fresh with no memory of previous runs
+>_ SYSTEM_LIMITATIONS
+Context Window: Works best on focused tasks. Large, multi-file projects may cause the model to lose context over many iterations.
 
-## License
+Air-Gapped: No internet access. It relies entirely on your local filesystem and the knowledge baked into the LLM weights.
 
-MIT
+Ephemeral Memory: Each session starts fresh. Context from previous terminal sessions is not saved.
+
+License: MIT
