@@ -27,7 +27,7 @@ from rich.console import Console
 from rich.panel import Panel
 
 console = Console()
-ROOT_DIR = Path(r"C:\Users\ALiam\OneDrive\Desktop\Coding\chat\Dist").resolve()
+ROOT_DIR = Path(r"C:\WHEREEVERYOUWANTYOURCODETOBE").resolve()
 ROOT_DIR.mkdir(parents=True, exist_ok=True)
 MODEL = "qwen2.5-coder:7b"
 OLLAMA_URL = "http://localhost:11434/api/generate"
