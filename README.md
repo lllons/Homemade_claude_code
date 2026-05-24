@@ -19,6 +19,8 @@ Example tasks:
 
 ## Setup
 
+**0 — Change the file location in agent.py to whereever you want the agent to see and edit code**
+
 **1 — Install Ollama**
 
 Download from [ollama.com](https://ollama.com) and install it. Then pull a model:
