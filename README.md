@@ -1,4 +1,8 @@
-# OUTDATED USE "TMT" INSTEAD
+# OUTDATED â USE [TMT](https://github.com/lllons/TMT) INSTEAD
+
+**This project is no longer maintained.** Please use [**TMT**](https://github.com/lllons/TMT) instead â it is the active, up-to-date successor to this agent.
+
+New repo: <https://github.com/lllons/TMT>
 
 
 > "I can read, write, and execute. And if you press F2, I can listen, too." 
